@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class WidgetAppBar extends StatefulWidget with PreferredSizeWidget {
   String title;
   List<Widget> listWidgets;
-  bool exitApp;
-  WidgetAppBar({@required this.title, this.listWidgets, this.exitApp});
+  bool showBackIcon;
+  WidgetAppBar({@required this.title, this.listWidgets, this.showBackIcon});
   @override
   _WidgetAppBarState createState() => _WidgetAppBarState();
 
@@ -22,15 +22,17 @@ class _WidgetAppBarState extends State<WidgetAppBar> {
       elevation: 0.5,
       backgroundColor: Colors.white,
       centerTitle: true,
-      leading: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black87,
-            size: 22,
-          )),
+      leading: widget.showBackIcon == true
+          ? InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black87,
+                size: 22,
+              ))
+          : null,
       title: Text(
         '${widget.title}',
         style: TextStyle(

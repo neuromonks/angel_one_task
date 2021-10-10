@@ -95,7 +95,12 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
                           'Security code : ',
                           style: TextStyle(color: ThemeColor.lightGrey),
                         ),
-                        Text('${item['Security Code']}'),
+                        Text(
+                          '${item['Security Code']}',
+                          style: TextStyle(
+                              color: ThemeColor.darkBlue,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
                     Padding(
@@ -104,9 +109,16 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
                         children: [
                           Text(
                             'Security Id : ',
-                            style: TextStyle(color: ThemeColor.lightGrey),
+                            style: TextStyle(
+                              color: ThemeColor.lightGrey,
+                            ),
                           ),
-                          Text('${item['Security Id']}'),
+                          Text(
+                            '${item['Security Id']}',
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                     )),

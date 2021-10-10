@@ -1,3 +1,4 @@
+import 'package:angle_one_task/theme/ThemeColor.dart';
 import 'package:angle_one_task/widgets/WidgetAppBar.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,10 @@ class ScreenStockDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetAppBar(title: 'Stock Details'),
+      appBar: WidgetAppBar(
+        title: 'Stock Details',
+        showBackIcon: true,
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -15,61 +19,107 @@ class ScreenStockDetails extends StatelessWidget {
             widgetDisplayDetailsInRow(
                 Row(
                   children: [
-                    Text('Security code : '),
-                    Text('${stockDetails['Security Code']}'),
+                    widgetLabel('Security code : '),
+                    Text(
+                      '${stockDetails['Security Code']}',
+                      style: TextStyle(
+                          color: ThemeColor.darkBlue,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('Security Id : '),
-                    Text('${stockDetails['Security Id']}'),
+                    widgetLabel('Security Id : '),
+                    Text(
+                      '${stockDetails['Security Id']}',
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.w600),
+                    ),
                   ],
                 )),
             widgetDivider(),
             widgetDisplayDetailsInRow(
                 Row(
                   children: [
-                    Text('Group : '),
-                    Text('${stockDetails['Group']}'),
+                    widgetLabel('Group : '),
+                    Text(
+                      '${stockDetails['Group']}',
+                      style: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('Face Value : '),
+                    widgetLabel('Face Value : '),
                     Text('${stockDetails['Face Value']}'),
                   ],
                 )),
             widgetDivider(),
             Row(
               children: [
-                Text('Issuer Name : '),
-                Text('${stockDetails['Issuer Name']}'),
+                widgetLabel('Issuer Name : '),
+                Text(
+                  '${stockDetails['Issuer Name']}',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
               ],
             ),
             widgetDivider(),
             Row(
               children: [
-                Text('Security Name : '),
-                Text('${stockDetails['Security Id']}'),
+                widgetLabel('Security Name : '),
+                Text(
+                  '${stockDetails['Security Name']}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.black54),
+                ),
               ],
             ),
             widgetDivider(),
             Row(
               children: [
-                Text('ISIN No : '),
-                Text('${stockDetails['ISIN No']}'),
+                widgetLabel('ISIN No : '),
+                Text(
+                  '${stockDetails['ISIN No']}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.black54),
+                ),
               ],
             ),
             widgetDivider(),
             Row(
               children: [
-                Text('Industry: '),
-                Text('${stockDetails['Industry']}'),
+                widgetLabel('Status : '),
+                Text(
+                  '${stockDetails['Status'].toString().isEmpty ? "NA" : stockDetails['Status']}',
+                  style: TextStyle(
+                      color: Colors.deepPurple, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            widgetDivider(),
+            Row(
+              children: [
+                widgetLabel('Industry: '),
+                Text(
+                  '${stockDetails['Industry']}',
+                  style: TextStyle(
+                      color: Colors.orange, fontWeight: FontWeight.w600),
+                ),
               ],
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget widgetLabel(String labelName) {
+    return Text(
+      '$labelName',
+      style: TextStyle(color: ThemeColor.lightGrey),
     );
   }
 
