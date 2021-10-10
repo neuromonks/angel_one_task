@@ -5,6 +5,7 @@ import 'package:angle_one_task/theme/ThemeProgressIndicator.dart';
 import 'package:angle_one_task/widgets/WidgetAppBar.dart';
 import 'package:angle_one_task/widgets/WidgetError.dart';
 import 'package:angle_one_task/widgets/WidgetNoDataFound.dart';
+import 'package:angle_one_task/widgets/WidgetSearchBar.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/services.dart';
@@ -36,10 +37,16 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
       appBar: WidgetAppBar(title: 'Stocks'),
       body: Column(
         children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: WidgetSearchBar(
+              hint: 'Search stock by id',
+            ),
+          ),
           Expanded(
             child: PagedListView(
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: 15, left: 10, right: 10),
+              padding: EdgeInsets.only(top: 5, left: 10, right: 10),
               builderDelegate: PagedChildBuilderDelegate(
                   firstPageProgressIndicatorBuilder: (context) => Container(
                       padding: EdgeInsets.only(
