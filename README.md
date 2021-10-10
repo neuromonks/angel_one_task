@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## Getting Started
 
-After cloning this project,run command :  
+1)After cloning this project,run command :  
 ## flutter pub get
 
 2)Run this project using command : 
