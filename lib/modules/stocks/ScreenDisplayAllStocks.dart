@@ -22,6 +22,7 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
   static const _pageSize = 10;
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 0);
+  bool isSortByFaceValueAscending;
   String query;
 
   @override
@@ -46,6 +47,48 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
                 query = searchQuery;
                 _pagingController.refresh();
               },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5, right: 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.sort,
+                  size: 18,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 7),
+                  child: PopupMenuButton(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Sort by face value',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      onSelected: (value) {
+                        setState(() {
+                          if (value == 1) {
+                            isSortByFaceValueAscending = true;
+                          } else if (value == 2) {
+                            isSortByFaceValueAscending = false;
+                          }
+                        });
+                        _pagingController.refresh();
+                      },
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Text("Sort by ascending order"),
+                              value: 1,
+                            ),
+                            PopupMenuItem(
+                              child: Text("Sort by descending order"),
+                              value: 2,
+                            ),
+                          ]),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -166,6 +209,14 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
             .where((element) =>
                 element['Security Id'].toString().contains(query.toUpperCase()))
             .toList();
+      }
+
+      if (isSortByFaceValueAscending != null) {
+        // newItems = newItems.where((element) => element['Face Value']).toList();
+        if (isSortByFaceValueAscending == true)
+          newItems.sort((a, b) => a['Face Value'].compareTo(b['Face Value']));
+        else
+          newItems.sort((b, a) => a['Face Value'].compareTo(b['Face Value']));
       }
 
       if (response != null) {
