@@ -59,6 +59,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/icons/
     - assets/stocks-list.json
   #   - images/a_dot_ham.jpeg
 
