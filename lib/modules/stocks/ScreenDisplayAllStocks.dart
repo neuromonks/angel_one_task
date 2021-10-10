@@ -43,6 +43,7 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
         appBar: WidgetAppBar(title: 'Stocks'),
         body: Column(
           children: [
+            //search bar
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: WidgetSearchBar(
@@ -53,6 +54,7 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
                 },
               ),
             ),
+            //sort
             Padding(
               padding: const EdgeInsets.only(top: 5, right: 15),
               child: Row(
@@ -95,40 +97,52 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
                 ],
               ),
             ),
+            //displaying list of stocks
             Expanded(
-              child: PagedListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 5, left: 10, right: 10),
-                builderDelegate: PagedChildBuilderDelegate(
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 3),
-                        child: Center(child: ThemeProgressIndicator.spinKit)),
-                    newPageProgressIndicatorBuilder: (context) => Container(
-                          child: Center(
-                            child: ThemeProgressIndicator.spinKit,
+              child: RefreshIndicator(
+                onRefresh: refreshPage,
+                child: PagedListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 5, left: 10, right: 10),
+                  builderDelegate: PagedChildBuilderDelegate(
+                      firstPageProgressIndicatorBuilder: (context) => Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 3),
+                          child: Center(child: ThemeProgressIndicator.spinKit)),
+                      newPageProgressIndicatorBuilder: (context) => Container(
+                            child: Center(
+                              child: ThemeProgressIndicator.spinKit,
+                            ),
                           ),
-                        ),
-                    firstPageErrorIndicatorBuilder: (context) => Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height / 2.7),
-                        child: WidgetError()),
-                    newPageErrorIndicatorBuilder: (context) =>
-                        Center(child: WidgetError()),
-                    noItemsFoundIndicatorBuilder: (context) => Container(
-                            child: WidgetNoDataFound(
-                          title: 'No support tickets found',
-                        )),
-                    itemBuilder: (context, item, index) {
-                      return widgetDisplayTicketDetails(item);
-                    }),
-                pagingController: _pagingController,
+                      firstPageErrorIndicatorBuilder: (context) => Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height / 2.7),
+                          child: WidgetError()),
+                      newPageErrorIndicatorBuilder: (context) =>
+                          Center(child: WidgetError()),
+                      noItemsFoundIndicatorBuilder: (context) => Container(
+                              child: WidgetNoDataFound(
+                            title: 'No stocks found',
+                          )),
+                      itemBuilder: (context, item, index) {
+                        return widgetDisplayTicketDetails(item);
+                      }),
+                  pagingController: _pagingController,
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> refreshPage() async {
+    //by pull down refresh I am reseting sorting parameters.
+    isSortByFaceValueAscending = null;
+    _pagingController.refresh();
+    return;
   }
 
   Widget widgetDisplayTicketDetails(var item) {
@@ -213,14 +227,15 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
   }
 
   getAllSupportTickets(int pageKey) async {
+    print(pageKey);
     try {
       final String responseData =
           await rootBundle.loadString('assets/stocks-list.json');
       var response = await json.decode(responseData);
-      List newItems = [];
-      newItems = response;
+      List listNewItems = [];
+      listNewItems = response;
       if (query != null) {
-        newItems = newItems
+        listNewItems = listNewItems
             .where((element) =>
                 element['Security Id'].toString().contains(query.toUpperCase()))
             .toList();
@@ -228,21 +243,23 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
 
       if (isSortByFaceValueAscending != null) {
         if (isSortByFaceValueAscending == true)
-          newItems.sort((a, b) => a['Face Value'].compareTo(b['Face Value']));
+          listNewItems
+              .sort((a, b) => a['Face Value'].compareTo(b['Face Value']));
         else
-          newItems.sort((b, a) => a['Face Value'].compareTo(b['Face Value']));
+          listNewItems
+              .sort((b, a) => a['Face Value'].compareTo(b['Face Value']));
       }
 
+      // newItems = newItems.sublist(pageKey, pageKey + 10);
+
       if (response != null) {
-        final isLastPage = newItems.length < _pageSize;
+        final isLastPage = listNewItems.length < _pageSize;
         if (isLastPage) {
-          _pagingController.appendLastPage(newItems);
+          _pagingController.appendLastPage(listNewItems);
         } else {
-          final nextPageKey = pageKey + 1;
-          _pagingController.appendPage(newItems, nextPageKey);
+          final nextPageKey = pageKey + _pageSize;
+          _pagingController.appendPage(listNewItems, nextPageKey);
         }
-      } else {
-        _pagingController.error = "null";
       }
     } catch (error) {
       _pagingController.error = error;
