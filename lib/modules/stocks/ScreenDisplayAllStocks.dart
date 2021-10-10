@@ -22,6 +22,7 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
   static const _pageSize = 10;
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 0);
+  String query;
 
   @override
   void initState() {
@@ -41,6 +42,10 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: WidgetSearchBar(
               hint: 'Search stock by id',
+              onTextChange: (searchQuery) {
+                query = searchQuery;
+                _pagingController.refresh();
+              },
             ),
           ),
           Expanded(
@@ -156,6 +161,13 @@ class _ScreenDisplayAllStocksState extends State<ScreenDisplayAllStocks> {
       var response = await json.decode(responseData);
       List newItems = [];
       newItems = response;
+      if (query != null) {
+        newItems = newItems
+            .where((element) =>
+                element['Security Id'].toString().contains(query.toUpperCase()))
+            .toList();
+      }
+
       if (response != null) {
         final isLastPage = newItems.length < _pageSize;
         if (isLastPage) {

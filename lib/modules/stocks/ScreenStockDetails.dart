@@ -60,9 +60,11 @@ class ScreenStockDetails extends StatelessWidget {
             Row(
               children: [
                 widgetLabel('Issuer Name : '),
-                Text(
-                  '${stockDetails['Issuer Name']}',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    '${stockDetails['Issuer Name']}',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),
@@ -70,10 +72,12 @@ class ScreenStockDetails extends StatelessWidget {
             Row(
               children: [
                 widgetLabel('Security Name : '),
-                Text(
-                  '${stockDetails['Security Name']}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: Colors.black54),
+                Expanded(
+                  child: Text(
+                    '${stockDetails['Security Name']}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: Colors.black54),
+                  ),
                 ),
               ],
             ),
